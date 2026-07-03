@@ -1,0 +1,166 @@
+[project]
+name = "llm-routing"
+version = "10.1.5"
+description = "Multi-LLM router MCP server — smart complexity routing, budget-aware model selection, 20+ providers (Claude, OpenAI, Gemini, Ollama, etc.)"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "ypollak2", email = "ypollak2@users.noreply.github.com" },
+]
+keywords = ["llm-router", "llm", "mcp", "claude", "router", "ai", "openai", "gemini", "litellm", "claude-code", "claude-desktop", "cost-optimization", "model-routing", "mcp-server"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "mcp>=1.0.0",
+    "litellm>=1.50.0",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "aiosqlite>=0.20.0",
+    "aiohttp>=3.9.0",
+    "structlog>=24.4.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.24.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-timeout>=2.3",
+    "pytest-xdist>=3.5",
+    "ruff>=0.4",
+]
+test = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-timeout>=2.3",
+]
+scripts = [
+    "httpx>=0.27",
+    "pyyaml>=6.0",
+]
+agno = [
+    "agno>=2.5.14",
+]
+tracing = [
+    "opentelemetry-sdk>=1.20",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.20",
+]
+code-context = [
+    "tree-sitter>=0.23.0",
+    "tree-sitter-languages>=1.10.0",
+]
+tui = [
+    "textual>=0.80.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ypollak2/llm-router"
+Repository = "https://github.com/ypollak2/llm-router"
+Issues = "https://github.com/ypollak2/llm-router/issues"
+Changelog = "https://github.com/ypollak2/llm-router/blob/main/CHANGELOG.md"
+
+[project.scripts]
+llm-router = "llm_router.cli:main"
+llm-router-sse = "llm_router.server:main_sse"
+llm-router-onboard = "llm_router.onboard:main"
+llm-router-install-hooks = "llm_router.install_hooks:main"
+llm-router-quickstart = "llm_router.quickstart:main"
+llm-router-isolation-test = "llm_router.cli:isolation_test_command"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llm_router"]
+
+[tool.hatch.build.targets.sdist]
+# Only ship: src/, pyproject.toml, LICENSE, README.md, CHANGELOG.md, CONTRIBUTING.md
+# Exclude everything else — internal docs, tools, test infra, plugin configs
+exclude = [
+    # Plugin / IDE configs
+    ".claude/",
+    ".claude-plugin/",
+    ".codex-plugin/",
+    ".factory-plugin/",
+    ".serena/",
+    ".playwright-mcp/",
+    ".playwright-cli/",
+    ".github/",
+    ".lore/",
+    ".internal/",
+    # Directories not needed in package
+    "agents/",
+    "demo/",
+    "docs/",
+    "research/",
+    "deprecation/",
+    "scripts/",
+    "skills/",
+    "submissions/",
+    "tests/",
+    "awesome-readme/",
+    # ── Backup / temp files — never publish (CLAUDE.md sdist safety rule) ─
+    ".env.backup.*",
+    "*.bak",
+    "*.bak.*",
+    # Private / internal docs — never publish
+    "CLAUDE.md",
+    "MONETIZATION.md",
+    "ROADMAP.md",
+    "STRATEGY.md",
+    "PRICING.md",
+    "SECURITY.md",
+    "PHASE_COMPLETION_REVIEW.md",
+    # Build / deploy artifacts
+    "Dockerfile",
+    "Procfile",
+    "uv.lock",
+    "mcp.json",
+    ".mcp.json",
+    # Images
+    "*.png",
+    "*.jpg",
+    # Git metadata not needed in package
+    ".gitignore",
+    ".gitattributes",
+    # Broken directory from gitignore quoting
+    '"/Users/',
+    '"/',
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+timeout = 30
+filterwarnings = [
+    # aiosqlite's worker thread may attempt call_soon_threadsafe after the
+    # session-scoped event loop is torn down by pytest-asyncio.
+    "ignore:Exception in thread.*_connection_worker_thread:pytest.PytestUnhandledThreadExceptionWarning",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"' for fast feedback)",
+    "fast: marks tests as fast (run with '-m fast' for quick validation)",
+    "integration: marks tests as integration tests (slow external calls)",
+    "requires_ollama: marks tests that require local Ollama instance (skip in CI)",
+    "requires_api_keys: marks tests that require mocked API keys (skip in CI)",
+    "requires_codex: marks tests that require Codex availability (skip in CI)",
+]
+addopts = "-m 'not slow and not requires_ollama and not requires_api_keys and not requires_codex' -q --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

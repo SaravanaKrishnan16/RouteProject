@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 48" fill="none">
+  <style>
+    @keyframes starFill {
+      0%, 30%, 100% { fill: #eef1f5; stroke: #656d76; }
+      40%, 70% { fill: #F59E0B; stroke: #F59E0B; }
+    }
+    .star { animation: starFill 4s ease-in-out infinite; }
+  </style>
+
+  <rect width="420" height="48" rx="12" fill="#f6f8fa" stroke="#d1d9e0" stroke-width="1"/>
+
+  <!-- Star icon (scaled 0.75x, left of text) -->
+  <g transform="translate(52 14)">
+    <path class="star" d="M10.5 0.9l2.55 5.18 5.7 0.83-4.13 4.03 0.98 5.7L10.5 13.95l-5.1 2.69 0.98-5.7-4.13-4.03 5.7-0.83L10.5 0.9z"
+          fill="#eef1f5" stroke="#656d76" stroke-width="0.8"/>
+  </g>
+
+  <!-- Text block, left-aligned after star -->
+  <text x="78" y="28" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#1f2328">Star on GitHub<tspan dx="6" font-weight="400" fill="#656d76">if llm-router saves your quota</tspan></text>
+</svg>

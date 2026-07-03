@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body {
+    background-color: #0f0f1a;
+    color: #e2e8f0;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #0f0f1a; }
+  ::-webkit-scrollbar-thumb { background: #2d2d4e; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+}
+
+@layer components {
+  .card { @apply bg-[#161625] border border-[#1e1e35] rounded-xl; }
+  .card-hover { @apply card hover:border-[#4f46e5]/40 transition-all duration-200; }
+  .btn-primary { @apply bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg transition-all duration-150 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed; }
+  .btn-ghost { @apply text-slate-400 hover:text-white hover:bg-white/5 px-3 py-2 rounded-lg transition-all duration-150 flex items-center gap-2; }
+  .badge { @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium; }
+  .badge-green { @apply badge bg-emerald-500/15 text-emerald-400 border border-emerald-500/20; }
+  .badge-blue { @apply badge bg-blue-500/15 text-blue-400 border border-blue-500/20; }
+  .badge-purple { @apply badge bg-purple-500/15 text-purple-400 border border-purple-500/20; }
+  .badge-yellow { @apply badge bg-yellow-500/15 text-yellow-400 border border-yellow-500/20; }
+  .badge-red { @apply badge bg-red-500/15 text-red-400 border border-red-500/20; }
+  .input { @apply bg-[#0f0f1a] border border-[#1e1e35] rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors w-full; }
+  .stat-card { @apply card p-5 flex flex-col gap-1; }
+  .glow { box-shadow: 0 0 20px rgba(99, 102, 241, 0.15); }
+}
+
+.node-active { animation: nodeGlow 1.5s ease-in-out infinite; }
+@keyframes nodeGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+  50% { box-shadow: 0 0 20px 4px rgba(99, 102, 241, 0.4); }
+}
+
+.connector-line { stroke-dasharray: 8 4; animation: dash 1.5s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -24; } }
+
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
